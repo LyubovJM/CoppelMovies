@@ -11,7 +11,7 @@ struct NewTokenResponse: Codable {
     let success: Bool
     let expiresAt, requestToken: String?
     
-    //respuestas de error
+
     let statusCode:Int?
     let statusMessage:String?
 
@@ -21,9 +21,9 @@ struct NewTokenResponse: Codable {
         case expiresAt = "expires_at"
         case requestToken = "request_token"
         
-        //respuestas de error
+
         case statusCode = "status_code"
         case statusMessage = "status_message"
-        //case success
+
     }
 }

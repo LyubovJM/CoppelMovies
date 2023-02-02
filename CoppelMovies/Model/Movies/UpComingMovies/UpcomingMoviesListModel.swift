@@ -1,16 +1,16 @@
 //
-//  PopMovies.swift
+//  AiringMoviesListModel.swift
 //  CoppelMovies
 //
-//  Created by Jesus Muñoz on 27/01/23.
+//  Created by Jesus Muñoz on 01/02/23.
 //
 
 import Foundation
 
 
-struct PopularMoviesListModel: Decodable {
+struct UpcomingMoviesListModel: Decodable {
     let page: Int
-    let results: [PopularMovieModel]
+    let results: [UpcomingMovieModel] 
     let totalPages, totalResults: Int
 
     enum CodingKeys: String, CodingKey {

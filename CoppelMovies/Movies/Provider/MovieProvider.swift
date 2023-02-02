@@ -9,25 +9,12 @@ import Foundation
 
 protocol MoviesProviderProtocol {
     func getPopularMovies() async throws -> PopularMoviesListModel
-    func getTopRated()
-    func getOnTV()
-    func airingToday()
+    func getTopRated() async throws -> TopMoviesListModel
+    func getnowPlaying() async throws -> NowPlayingMoviesListModel
+    func getUpcoming() async throws -> UpcomingMoviesListModel
 }
 
 class MoviesProvider : MoviesProviderProtocol {
-    func getTopRated() {
-        print("soon")
-    }
-    /*func getTopRated() async throws -> TopRatedMoviesModel {
-        let requestModel = RequestModel(endpoint: .topRatedMovies)
-        do{
-            let model = try await ServiceLayer.callService(requestModel, TopRatedMoviesModel.self)
-            return model
-        }catch{
-            print(error)
-            throw error
-        }
-    }*/
     
     func getPopularMovies() async throws -> PopularMoviesListModel {
         let requestModel = RequestModel(endpoint: .popularMovies)
@@ -39,14 +26,35 @@ class MoviesProvider : MoviesProviderProtocol {
             throw error
         }
     }
-    
-    func getOnTV() {
-        print("soon")
+    func getTopRated() async throws -> TopMoviesListModel {
+        let requestModel = RequestModel(endpoint: .topRatedMovies)
+        do{
+            let model = try await ServiceLayer.callService(requestModel, TopMoviesListModel.self)
+            return model
+        }catch{
+            print(error)
+            throw error
+        }
     }
-    
-    func airingToday() {
-        print("soon")
+    func getnowPlaying() async throws -> NowPlayingMoviesListModel {
+        let requestModel = RequestModel(endpoint: .nowPlaying)
+        do{
+            let model = try await ServiceLayer.callService(requestModel, NowPlayingMoviesListModel.self)
+            return model
+        }catch{
+            print(error)
+            throw error
+        }
     }
-    
-    
+    func getUpcoming() async throws -> UpcomingMoviesListModel {
+        let requestModel = RequestModel(endpoint: .upcoming)
+        do{
+            let model = try await ServiceLayer.callService(requestModel, UpcomingMoviesListModel.self)
+            return model
+        }catch{
+            print(error)
+            throw error
+        }
+    }
 }
+

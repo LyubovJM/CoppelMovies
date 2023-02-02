@@ -1,13 +1,13 @@
 //
-//  PopMoviesModel.swift
+//  OnTVMoviesModel.swift
 //  CoppelMovies
 //
-//  Created by Jesus Muñoz on 27/01/23.
+//  Created by Jesus Muñoz on 01/02/23.
 //
 
 import Foundation
 
-struct PopularMovieModel: Decodable {
+struct NowPlayingMovieModel: Decodable {
     let adult: Bool
     let backdropPath: String
     let genreIDS: [Int]

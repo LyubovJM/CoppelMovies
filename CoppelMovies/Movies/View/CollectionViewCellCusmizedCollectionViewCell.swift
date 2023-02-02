@@ -17,6 +17,14 @@ class CollectionViewCellCusmizedCollectionViewCell: UICollectionViewCell {
         return stackView
     }()
     
+    let swiftStackView1: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.layer.cornerRadius = 20
+        return stackView
+    }()
+    
     var imageView: UIImageView = {
        let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -26,7 +34,7 @@ class CollectionViewCellCusmizedCollectionViewCell: UICollectionViewCell {
     
     var movieTitle: UILabel = {
        let label = UILabel()
-        label.font = .systemFont(ofSize: 15)
+        label.font = UIFont(name: "Arial Rounded MT Bold", size: 20)
         label.textAlignment = .left
         label.textColor = .green
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -35,7 +43,7 @@ class CollectionViewCellCusmizedCollectionViewCell: UICollectionViewCell {
     
     let movieDate: UILabel = {
        let label = UILabel()
-        label.font = .systemFont(ofSize: 15)
+        label.font = UIFont(name: "Arial Rounded MT", size: 12)
         label.textAlignment = .left
         label.textColor = .green
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -44,7 +52,7 @@ class CollectionViewCellCusmizedCollectionViewCell: UICollectionViewCell {
     
     let movieRating: UILabel = {
        let label = UILabel()
-        label.font = .systemFont(ofSize: 15)
+        label.font = UIFont(name: "Arial Rounded MT", size: 12)
         label.textAlignment = .left
         label.textColor = .green
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -53,7 +61,7 @@ class CollectionViewCellCusmizedCollectionViewCell: UICollectionViewCell {
     
     let movieDesc: UILabel = {
        let label = UILabel()
-        label.font = .systemFont(ofSize: 15)
+        label.font = UIFont(name: "Arial Rounded MT", size: 12)
         label.textAlignment = .left
         label.textColor = .green
         label.numberOfLines = 4
@@ -75,8 +83,7 @@ class CollectionViewCellCusmizedCollectionViewCell: UICollectionViewCell {
         
         swiftStackView.addArrangedSubview(imageView)
         swiftStackView.addArrangedSubview(movieTitle)
-        swiftStackView.addArrangedSubview(movieDate)
-        swiftStackView.addArrangedSubview(movieRating)
+        swiftStackView.addArrangedSubview(swiftStackView1)
         swiftStackView.addArrangedSubview(movieDesc)
         
         NSLayoutConstraint.activate([
@@ -88,14 +95,17 @@ class CollectionViewCellCusmizedCollectionViewCell: UICollectionViewCell {
             movieTitle.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 10),
             movieTitle.centerXAnchor.constraint(equalTo: swiftStackView.centerXAnchor, constant: -40),
             
-            movieDate.topAnchor.constraint(equalTo: movieTitle.bottomAnchor, constant: 10),
-            movieDate.centerXAnchor.constraint(equalTo: swiftStackView.centerXAnchor, constant: -40),
+            swiftStackView1.topAnchor.constraint(equalTo: movieTitle.bottomAnchor, constant: 10),
+            swiftStackView1.centerXAnchor.constraint(equalTo: swiftStackView.centerXAnchor),
+            swiftStackView1.leftAnchor.constraint(equalTo: swiftStackView.leftAnchor, constant: 10),
+            swiftStackView1.trailingAnchor.constraint(equalTo: swiftStackView.trailingAnchor, constant: -10),
+            swiftStackView1.heightAnchor.constraint(equalToConstant: 20),
             
-            movieRating.topAnchor.constraint(equalTo: movieDate.bottomAnchor, constant: 10),
-            movieRating.centerXAnchor.constraint(equalTo: swiftStackView.centerXAnchor, constant: -40),
-            
-            movieDesc.topAnchor.constraint(equalTo: movieRating.bottomAnchor, constant: 40),
+            movieDesc.topAnchor.constraint(equalTo: swiftStackView1.bottomAnchor, constant: 40),
         ])
+        
+        swiftStackView1.addArrangedSubview(movieDate)
+        swiftStackView1.addArrangedSubview(movieRating)
     }
     
     required init?(coder: NSCoder) {

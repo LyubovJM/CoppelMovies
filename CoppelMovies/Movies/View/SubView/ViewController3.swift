@@ -9,7 +9,17 @@ import UIKit
 
 class ViewController3 : UIViewController {
     
-    lazy var movies : [CardMovieModel] = []
+    var response : CardMovieModel?
+    
+    
+    init(response : CardMovieModel){
+        self.response = response
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     private let scrollView: UIScrollView = {
         let scrollview = UIScrollView()
@@ -21,9 +31,7 @@ class ViewController3 : UIViewController {
     private let viewMain: UIView = {
         let view = UIView()
         view.contentMode = .scaleAspectFill
-        
         view.translatesAutoresizingMaskIntoConstraints = false
-        
         
         return view
     }()
@@ -31,22 +39,19 @@ class ViewController3 : UIViewController {
     private let stackView1: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        
         stackView.distribution = .fill
         stackView.spacing = 10
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
-    
-    
+
     private let imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "Avatar")
-        imageView.contentMode = .scaleAspectFit
+        imageView.image = UIImage(named: "")
+        imageView.contentMode = .scaleAspectFill
         imageView.tintColor = .purple
         imageView.layer.cornerRadius = 150
-        
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
         return imageView
@@ -57,19 +62,7 @@ class ViewController3 : UIViewController {
         label.font = UIFont(name: "Arial Rounded MT Bold", size: 20)
         label.text = ""
         label.textColor = .green
-        label.textAlignment = .left
-        
-        label.translatesAutoresizingMaskIntoConstraints = false
-        
-        return label
-    }()
-    
-    private lazy var usernameLabel: UILabel = {
-        var label = UILabel()
-        label.font = UIFont(name: "Arial Rounded MT", size: 15)
-        label.text = "@username"
-        label.textColor = .green
-        label.textAlignment = .left
+        label.textAlignment = .center
         
         label.translatesAutoresizingMaskIntoConstraints = false
         
@@ -79,10 +72,9 @@ class ViewController3 : UIViewController {
     private lazy var movieDate: UILabel = {
         var label = UILabel()
         label.font = UIFont(name: "Arial Rounded MT", size: 15)
-        label.text = "movieDate"
+        label.text = ""
         label.textColor = .green
         label.textAlignment = .left
-        
         label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
@@ -93,7 +85,6 @@ class ViewController3 : UIViewController {
         label.text = "movieDate"
         label.textColor = .green
         label.textAlignment = .left
-        
         label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
@@ -101,12 +92,11 @@ class ViewController3 : UIViewController {
     
     private lazy var movieDesc: UILabel = {
         var label = UILabel()
-        label.font = UIFont(name: "Arial Rounded MT", size: 15)
+        label.font = UIFont(name: "Arial Rounded MT", size: 16)
         label.text = "movieDate"
         label.textColor = .green
-        label.textAlignment = .left
-        label.numberOfLines = 6
-        
+        label.textAlignment = .justified
+        label.numberOfLines = 15
         label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
@@ -119,8 +109,6 @@ class ViewController3 : UIViewController {
         configuration.baseBackgroundColor = UIColor(red: 0.900, green: 0.900, blue: 0.900, alpha: 1.0)
         configuration.baseForegroundColor = .white
         configuration.cornerStyle = .large
-        
-        
         let button = UIButton(type: .system, primaryAction: UIAction(handler: {_ in
             self.loginFunc()
         }))
@@ -130,6 +118,7 @@ class ViewController3 : UIViewController {
     }()
         
         override func viewDidLoad() {
+            configureDetails(model: response ?? .init(id: 1, url: "", title: "", date: "", rating: "", description: ""))
             super.viewDidLoad()
             
             view.addSubview(scrollView)
@@ -152,35 +141,38 @@ class ViewController3 : UIViewController {
             ])
             
             viewMain.backgroundColor = UIColor(red: 0.047, green: 0.082, blue: 0.102, alpha: 1)
-            
             viewMain.addSubview(imageView)
             viewMain.addSubview(movieTitle)
-            viewMain.addSubview(movieDate)
-            viewMain.addSubview(movieRating)
+            viewMain.addSubview(stackView1)
             viewMain.addSubview(movieDesc)
-            viewMain.addSubview(loginButton)
+
             
             
             NSLayoutConstraint.activate([
                 imageView.topAnchor.constraint(equalTo: viewMain.topAnchor, constant: 10),
                 imageView.centerXAnchor.constraint(equalTo: viewMain.centerXAnchor),
+                imageView.widthAnchor.constraint(equalToConstant: 200),
+                imageView.heightAnchor.constraint(equalToConstant: 300),
                 
                 movieTitle.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 20),
-                movieTitle.centerXAnchor.constraint(equalTo: viewMain.centerXAnchor, constant: -150),
+                movieTitle.centerXAnchor.constraint(equalTo: viewMain.centerXAnchor),
+                movieTitle.leadingAnchor.constraint(equalTo: viewMain.leadingAnchor, constant: 30),
+                movieTitle.leadingAnchor.constraint(equalTo: viewMain.trailingAnchor, constant: -30),
                 
-                movieDate.topAnchor.constraint(equalTo: movieTitle.bottomAnchor, constant: 20),
-                movieDate.centerXAnchor.constraint(equalTo: viewMain.centerXAnchor),
+                stackView1.topAnchor.constraint(equalTo: movieTitle.bottomAnchor, constant: 20),
+                stackView1.centerXAnchor.constraint(equalTo: viewMain.centerXAnchor),
+                stackView1.leadingAnchor.constraint(equalTo: viewMain.leadingAnchor, constant: 30),
+                stackView1.trailingAnchor.constraint(equalTo: viewMain.trailingAnchor, constant: -30),
                 
-                movieRating.topAnchor.constraint(equalTo: movieDate.bottomAnchor, constant: 20),
-                movieRating.centerXAnchor.constraint(equalTo: viewMain.centerXAnchor),
-                
-                movieDesc.topAnchor.constraint(equalTo: movieRating.bottomAnchor, constant: 20),
+                movieDesc.topAnchor.constraint(equalTo: stackView1.bottomAnchor, constant: 20),
                 movieDesc.centerXAnchor.constraint(equalTo: viewMain.centerXAnchor),
+                movieDesc.leadingAnchor.constraint(equalTo: viewMain.leadingAnchor, constant: 30),
+                movieDesc.leadingAnchor.constraint(equalTo: viewMain.trailingAnchor, constant: -30),
                 
-                loginButton.topAnchor.constraint(equalTo: movieDesc.bottomAnchor, constant: 20),
-                loginButton.centerXAnchor.constraint(equalTo: viewMain.centerXAnchor)
             ])
-            
+                stackView1.addArrangedSubview(movieDate)
+                stackView1.addArrangedSubview(movieRating)
+           
             
         }
         
@@ -196,8 +188,10 @@ class ViewController3 : UIViewController {
         }
         
         func loginFunc() {
-            print(movies)
+            print(response ?? .init(id: 1, url: "", title: "", date: "", rating: "", description: ""))
         }
+    
+    
     }
     
 

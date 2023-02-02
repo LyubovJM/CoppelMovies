@@ -11,6 +11,16 @@ open class ViewController2: UIViewController, UICollectionViewDataSource, UIColl
     
     lazy var movies : [CardMovieModel] = []
     
+    lazy var movies1 : [CardMovieModel] = []
+    
+    lazy var movies2 : [CardMovieModel] = []
+    
+    lazy var movies3 : [CardMovieModel] = []
+    
+    lazy var movies4 : [CardMovieModel] = []
+    
+    lazy var movie : [CardMovieModel] = []
+    
     lazy var presenter = MoviesPresenter()
         
     var imageView1: UIImageView = {
@@ -36,12 +46,12 @@ open class ViewController2: UIViewController, UICollectionViewDataSource, UIColl
         let titleTextAttributes2 = [NSAttributedString.Key.foregroundColor: UIColor.white]
         UISegmentedControl.appearance().setTitleTextAttributes(titleTextAttributes, for: .normal)
         
-        let sc = UISegmentedControl(items: ["Popular", "Top Rated", "On Tv", "Airing Today"])
+        let sc = UISegmentedControl(items: ["Popular", "Top Rated", "Now Playing", "Upcoming"])
         sc.translatesAutoresizingMaskIntoConstraints = false
         sc.selectedSegmentTintColor = UIColor(red: 0.502, green: 0.502, blue: 0.502, alpha: 1)
         sc.backgroundColor = UIColor(red: 0.098, green: 0.125, blue: 0.149, alpha: 1)
         sc.selectedSegmentIndex = 0
-        sc.addTarget(self, action: #selector(handleSegmentedControlChange(_:)), for: .valueChanged)
+        sc.addTarget(self, action: #selector(handleSegmentedControlChange), for: .valueChanged)
         return sc
     }()
     
@@ -64,10 +74,9 @@ open class ViewController2: UIViewController, UICollectionViewDataSource, UIColl
     
     private lazy var swiftCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        //     layout.scrollDirection = .horizontal (kind scrolling)
         layout.itemSize = .init(width: 170, height: 200)
-        layout.minimumLineSpacing = 150//(spacing with lines)
-        layout.minimumInteritemSpacing = 0 //(spacing with items)
+        layout.minimumLineSpacing = 150
+        layout.minimumInteritemSpacing = 0
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         
@@ -78,7 +87,12 @@ open class ViewController2: UIViewController, UICollectionViewDataSource, UIColl
     
     open override func viewDidLoad() {
         Task(priority: .high) {
+            await loadDataDeploy()
             await loadData()
+            await loadData1()
+            await loadData2()
+            await loadData3()
+            await loadData3()
         }
         Task(priority: .low) {
             swiftCollectionView
@@ -141,12 +155,24 @@ open class ViewController2: UIViewController, UICollectionViewDataSource, UIColl
         
     }
 
-    private func loadData() async {
+    func loadDataDeploy() async {
         movies = await presenter.popularMovies()
         swiftCollectionView.reloadData()
-        swiftCollectionView.reloadInputViews()
     }
-    
+    func loadData() async {
+        movies1 = await presenter.popularMovies()
+    }
+    func loadData1() async {
+        movies2 = await presenter.topMovies()
+    }
+    func loadData2() async {
+        movies3 =  await presenter.nowPlaying()
+
+    }
+    func loadData3() async {
+        movies4 = await presenter.upcoming()
+
+    }
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return movies.count
     }
@@ -164,26 +190,40 @@ open class ViewController2: UIViewController, UICollectionViewDataSource, UIColl
     
     public func collectionView(_ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath) {
-        self.navigationController?.present(ViewController3(), animated: true)
+        let arrayFromDatasource = movies[indexPath.row]
+        let response = CardMovieModel(id: arrayFromDatasource.id , url: arrayFromDatasource.url, title: arrayFromDatasource.title, date: arrayFromDatasource.date, rating: arrayFromDatasource.rating, description: arrayFromDatasource.description)
+        let vcd = ViewController3(response: response)
+        self.navigationController?.present(vcd, animated: true)
     }
-        
+    
         @objc
         private func toControllUser() {
-            self.navigationController?.present(VIewControllerUser(), animated: true)
+            self.navigationController?.present(ViewControllerUser(), animated: true)
         }
     
         @objc
-        func handleSegmentedControlChange(_ sc: UISegmentedControl!) {
-        if segmentedControl.selectedSegmentIndex == 0 {
+    func handleSegmentedControlChange(){
+        switch segmentedControl.selectedSegmentIndex {
+        case 0:
             titleLabel.text = "Popular Movies"
-        }else if segmentedControl.selectedSegmentIndex == 1 {
+            movies.removeAll()
+            movies = movies1
+        case 1:
             titleLabel.text = "Top Rated Movies"
-
-        }else if segmentedControl.selectedSegmentIndex == 2 {
-            titleLabel.text = "Movies On TV"
-        }else{
-            titleLabel.text = "Airing Today"
+            movies.removeAll()
+            movies = movies2
+        case 2:
+            titleLabel.text = "Now Palying Movies"
+            movies.removeAll()
+            movies = movies3
+        default:
+            titleLabel.text = "Upcoming Movies"
+            movies.removeAll()
+            movies = movies4
         }
+        swiftCollectionView.reloadData()
+    
+
     }
 
 }
