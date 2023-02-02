@@ -19,3 +19,4 @@ struct TopMoviesListModel: Decodable {
         case totalResults = "total_results"
     }
 }
+ 
